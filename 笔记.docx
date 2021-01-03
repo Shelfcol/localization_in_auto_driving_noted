@@ -1,0 +1,19 @@
+std::mutex互斥量是一个类，这个类有有一个lock()方法，和一个unlock()方法。如果第一次运行了lock()这个方法，而没有运行unlock()这个方法，第二次再运行lock()这个方法时，程序就会卡停在这里，只有当运行了unlock()这个方法运行后，第二个lock()方法才会运行通过。
+std::mutex my_mutex;
+void test()
+{
+	my_mutex.lock();//运行之后如果没有unlock，则下次再到此位置时就会堵在这里。lock和unlock必须成对出现。
+	do_sth();
+	my_mutex.unlock();
+
+}
+
+也可以用std::lock_guard<std::mutex> my_lock_guard(my_mutex)代替lock和unlock
+std::mutex my_mutex;
+void test()
+{
+	std::lock_guard<std::mutex> my_lock_guard(my_mutex);//只在当前作用域内有效，出了当前作用域就相当于自动执行了unlock
+	do_sth();
+
+}
+
